@@ -3,10 +3,11 @@ import CombinedRequirement from '@/models/CombinedRequirementModel';
 import { ConnectDB } from '@/lib/config/db';
 
 export async function POST(req) {
-  const { budgetMin, budgetMax, location, userId } = await req.json();  // Assume userId is passed
-
+  const { budgetMin, budgetMax, location, userId } = await req.json();
+  
+  // Check if all required fields are present
   if (!budgetMin || !budgetMax || !location || !userId) {
-    return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    return NextResponse.json({ error: 'Missing required fields or user not logged in' }, { status: 400 });
   }
 
   try {

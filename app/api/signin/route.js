@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import User from '@/models/UserModel';  // Ensure the path is correct
+import User from '@/models/UserModel';  
 import { ConnectDB } from '@/lib/config/db';
 import bcrypt from 'bcryptjs';
 

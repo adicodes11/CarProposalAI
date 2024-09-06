@@ -41,29 +41,40 @@ const Requirement1 = () => {
   const handleBack = () => {
     router.push('/welcome');
   };
-
   const handleNext = async () => {
     if (!budget || !location) {
       alert('Please select both budget and location.');
       return;
     }
-
+  
+    // Retrieve userId from sessionStorage
+    const userId = sessionStorage.getItem('userId');
+    
+    if (!userId) {
+      alert('User not logged in.');
+      return;
+    }
+  
     const [minBudgetStr, maxBudgetStr] = budget.split(' - ');
     const minBudget = parseInt(minBudgetStr.replace('₹', '').replace(',', '').replace('Lakh', '')) * 100000;
     const maxBudget = maxBudgetStr === 'and above'
       ? Number.MAX_SAFE_INTEGER
       : parseInt(maxBudgetStr.replace('₹', '').replace(',', '').replace('Lakh', '')) * 100000;
-
+  
     try {
       const response = await fetch('/api/requirementPagesRoutes/requirement1Route', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ budgetMin: minBudget, budgetMax: maxBudget, location, userId }),  // Include userId
       });
-
+  
       if (response.ok) {
+        const data = await response.json();
+        console.log('Success:', data);  // Log success message
         router.push('/requirementPages/requirement2');
       } else {
+        const errorData = await response.json();
+        console.error('Error:', errorData);  // Log server response error
         alert('Failed to submit your data. Please check the console for details.');
       }
     } catch (error) {
@@ -71,7 +82,7 @@ const Requirement1 = () => {
       alert('An error occurred. Please try again.');
     }
   };
-
+  
   return (
     <div className="p-4 flex flex-col items-center justify-between h-screen relative">
       <div className="absolute top-5 left-[80px]">

@@ -37,15 +37,17 @@ export default function SignIn() {
         sessionStorage.setItem('firstName', data.firstName);
         sessionStorage.setItem('userId', data.userId); // Save userId to sessionStorage
 
+        // Redirect to the welcome page
         setTimeout(() => {
-          router.push('/welcome'); // Redirect to the welcome page
+          router.push('/welcome'); // Adjust this path as needed
         }, 1500);
       } else {
-        setMessage(data.error);
+        // Set error message from response
+        setMessage(data.error || 'An error occurred. Please try again.');
       }
     } catch (error) {
       console.error('Error signing in user:', error);
-      setMessage('An error occurred. Please try again.');
+      setMessage('An unexpected error occurred. Please try again later.');
     }
   };
 
@@ -98,9 +100,7 @@ export default function SignIn() {
           </a>
         </p>
       </div>
-      <div style={{ paddingTop: '20rem' }}>
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
 }
