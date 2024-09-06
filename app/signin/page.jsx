@@ -32,9 +32,10 @@ export default function SignIn() {
       const data = await res.json();
       if (res.ok) {
         setMessage('User signed in successfully!');
-        
-        // Save the user's first name to session storage
+
+        // Save the user's first name and userId to session storage
         sessionStorage.setItem('firstName', data.firstName);
+        sessionStorage.setItem('userId', data.userId); // Save userId to sessionStorage
 
         setTimeout(() => {
           router.push('/welcome'); // Redirect to the welcome page

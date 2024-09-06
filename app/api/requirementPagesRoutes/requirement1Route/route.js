@@ -1,12 +1,11 @@
-// src/app/api/requirementPagesRoutes/requirement1Route/route.js
 import { NextResponse } from 'next/server';
 import CombinedRequirement from '@/models/CombinedRequirementModel';
 import { ConnectDB } from '@/lib/config/db';
 
 export async function POST(req) {
-  const { budgetMin, budgetMax, location } = await req.json();
+  const { budgetMin, budgetMax, location, userId } = await req.json();  // Assume userId is passed
 
-  if (!budgetMin || !budgetMax || !location) {
+  if (!budgetMin || !budgetMax || !location || !userId) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
   }
 
@@ -17,10 +16,11 @@ export async function POST(req) {
       budgetMin,
       budgetMax,
       location,
+      createdBy: userId,  // Set the user who created this requirement
       createdAt: new Date(),
     });
 
-    return NextResponse.json({ success: true, data: result._id }); // Return the ID
+    return NextResponse.json({ success: true, data: result._id });  // Return the ID
   } catch (error) {
     console.error('Error inserting data:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

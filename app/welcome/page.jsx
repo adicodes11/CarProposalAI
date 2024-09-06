@@ -26,7 +26,7 @@ export default function Welcome() {
       </video>
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen bg-white bg-opacity-60">
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen bg-red bg-opacity-60">
         <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">
           Hey {firstName} 👋, Welcome to Auto Proposal AI
         </h1>

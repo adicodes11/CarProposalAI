@@ -12,6 +12,9 @@ const Requirement1 = () => {
   const [showLocation, setShowLocation] = useState(false);
   const router = useRouter();
 
+  // Assume userId is fetched from session or authentication context
+  const userId = '66d5c93e711f3d3f93968f94';  // Example hardcoded userId
+
   // Load previous selections from sessionStorage
   useEffect(() => {
     const savedBudget = sessionStorage.getItem('budget');
@@ -55,7 +58,7 @@ const Requirement1 = () => {
       const response = await fetch('/api/requirementPagesRoutes/requirement1Route', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ budgetMin: minBudget, budgetMax: maxBudget, location }),
+        body: JSON.stringify({ budgetMin: minBudget, budgetMax: maxBudget, location, userId }),  // Include userId
       });
 
       if (response.ok) {
@@ -136,16 +139,16 @@ const Requirement1 = () => {
           </div>
         )}
 
-        <div className="flex justify-between w-full max-w-lg mt-8">
+        <div className="flex w-full max-w-lg justify-between mt-4">
           <button
             onClick={handleBack}
-            className="flex items-center px-6 py-2 border border-blue-700 rounded-md text-blue-700 font-bold hover:bg-blue-50"
+            className="px-4 py-2 bg-blue-100 text-blue-600 border border-blue-600 rounded-md"
           >
             Back
           </button>
           <button
             onClick={handleNext}
-            className="px-6 py-2 border border-red-700 rounded-md text-white font-bold bg-red-700 hover:bg-red-800"
+            className="px-4 py-2 bg-blue-600 text-white rounded-md"
           >
             Next
           </button>
