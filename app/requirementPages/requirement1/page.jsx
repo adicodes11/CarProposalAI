@@ -12,6 +12,9 @@ const Requirement1 = () => {
   const [showLocation, setShowLocation] = useState(false);
   const router = useRouter();
 
+  // Assume userId is fetched from session or authentication context
+  const userId = '66d5c93e711f3d3f93968f94';  // Example hardcoded userId
+
   // Load previous selections from sessionStorage
   useEffect(() => {
     const savedBudget = sessionStorage.getItem('budget');
@@ -38,29 +41,40 @@ const Requirement1 = () => {
   const handleBack = () => {
     router.push('/welcome');
   };
-
   const handleNext = async () => {
     if (!budget || !location) {
       alert('Please select both budget and location.');
       return;
     }
-
+  
+    // Retrieve userId from sessionStorage
+    const userId = sessionStorage.getItem('userId');
+    
+    if (!userId) {
+      alert('User not logged in.');
+      return;
+    }
+  
     const [minBudgetStr, maxBudgetStr] = budget.split(' - ');
     const minBudget = parseInt(minBudgetStr.replace('₹', '').replace(',', '').replace('Lakh', '')) * 100000;
     const maxBudget = maxBudgetStr === 'and above'
       ? Number.MAX_SAFE_INTEGER
       : parseInt(maxBudgetStr.replace('₹', '').replace(',', '').replace('Lakh', '')) * 100000;
-
+  
     try {
       const response = await fetch('/api/requirementPagesRoutes/requirement1Route', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ budgetMin: minBudget, budgetMax: maxBudget, location }),
+        body: JSON.stringify({ budgetMin: minBudget, budgetMax: maxBudget, location, userId }),  // Include userId
       });
-
+  
       if (response.ok) {
+        const data = await response.json();
+        console.log('Success:', data);  // Log success message
         router.push('/requirementPages/requirement2');
       } else {
+        const errorData = await response.json();
+        console.error('Error:', errorData);  // Log server response error
         alert('Failed to submit your data. Please check the console for details.');
       }
     } catch (error) {
@@ -68,7 +82,7 @@ const Requirement1 = () => {
       alert('An error occurred. Please try again.');
     }
   };
-
+  
   return (
     <div className="p-4 flex flex-col items-center justify-between h-screen relative">
       <div className="absolute top-5 left-[80px]">
@@ -136,7 +150,7 @@ const Requirement1 = () => {
           </div>
         )}
 
-        <div className="flex justify-between w-full max-w-lg mt-8">
+        <div className="flex w-full max-w-lg justify-between mt-4">
           <button
             onClick={handleBack}
             className="flex items-center px-6 py-2 border border-blue-700 rounded-md text-blue-700 font-bold hover:bg-blue-50"

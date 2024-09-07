@@ -39,7 +39,7 @@ export default function SignUp() {
         sessionStorage.setItem('firstName', firstName);
 
         setTimeout(() => {
-          router.push('/welcome'); // Redirect to the welcome page after a short delay
+          router.push('/signin'); // Redirect to the welcome page after a short delay
         }, 1500); // Adjust the delay as needed
       } else {
         setMessage(data.error); // Display error message from the server

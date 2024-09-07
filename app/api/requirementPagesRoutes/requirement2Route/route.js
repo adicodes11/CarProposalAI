@@ -1,7 +1,7 @@
 // G:/FY Project/AutoProposalAI/app/api/requirementPagesRoutes/requirement2Route/route.js
 
 import { NextResponse } from 'next/server';
-import CombinedRequirement from '@/models/CombinedRequirementModel';
+import CustomerRequirementInput from '@/models/CustomerRequirementInput';
 import { ConnectDB } from '@/lib/config/db';
 
 export async function POST(req) {
@@ -23,7 +23,7 @@ export async function POST(req) {
     };
 
     // Find the most recent record and update it with body style
-    const result = await CombinedRequirement.findOneAndUpdate(
+    const result = await CustomerRequirementInput.findOneAndUpdate(
       {}, // Empty filter object to find the most recent document
       updateData, // Fields to update
       { sort: { createdAt: -1 }, new: true } // Sort by the most recent createdAt and return the updated document

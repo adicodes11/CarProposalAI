@@ -1,6 +1,6 @@
 // src/app/api/detailedRequirementPagesRoutes/detailedRequirement1Route/route.js
 import { NextResponse } from "next/server";
-import CombinedRequirement from "@/models/CombinedRequirementModel";
+import CustomerRequirementInput from "@/models/CustomerRequirementInput";
 import { ConnectDB } from "@/lib/config/db";
 
 export async function POST(req) {
@@ -10,8 +10,10 @@ export async function POST(req) {
     driveModes,
     exteriorDesign = [],
     groundClearance,
-    fuelTankCapacity,
-    bootSpace,
+    fuelTankCapacityMin,  // Handling the range for fuel tank capacity
+    fuelTankCapacityMax,  // Handling the range for fuel tank capacity
+    bootSpaceMin,         // Handling the range for boot space
+    bootSpaceMax,         // Handling the range for boot space
     safetyFeatures = [],
     entertainmentFeatures = [],
     comfortFeatures = [],
@@ -22,6 +24,12 @@ export async function POST(req) {
   try {
     await ConnectDB();
 
+    // Check if fuel tank capacity and boot space are valid
+    const validFuelTankCapacityMin = fuelTankCapacityMin !== null && !isNaN(fuelTankCapacityMin) ? fuelTankCapacityMin : null;
+    const validFuelTankCapacityMax = fuelTankCapacityMax !== null && !isNaN(fuelTankCapacityMax) ? fuelTankCapacityMax : null;
+    const validBootSpaceMin = bootSpaceMin !== null && !isNaN(bootSpaceMin) ? bootSpaceMin : null;
+    const validBootSpaceMax = bootSpaceMax !== null && !isNaN(bootSpaceMax) ? bootSpaceMax : null;
+
     // Build the update data object
     const updateData = {
       enginePower: enginePower || "",
@@ -29,8 +37,10 @@ export async function POST(req) {
       driveModes: driveModes || "",
       exteriorDesign: exteriorDesign.length > 0 ? exteriorDesign : [],
       groundClearance: groundClearance || "",
-      fuelTankCapacity: fuelTankCapacity || "",
-      bootSpace: bootSpace || "",
+      fuelTankCapacityMin: validFuelTankCapacityMin,  // Use valid parsed value
+      fuelTankCapacityMax: validFuelTankCapacityMax,  // Use valid parsed value
+      bootSpaceMin: validBootSpaceMin,                // Use valid parsed value
+      bootSpaceMax: validBootSpaceMax,                // Use valid parsed value
       safetyFeatures: safetyFeatures.length > 0 ? safetyFeatures : [],
       entertainmentFeatures: entertainmentFeatures.length > 0 ? entertainmentFeatures : [],
       comfortFeatures: comfortFeatures.length > 0 ? comfortFeatures : [],
@@ -40,7 +50,7 @@ export async function POST(req) {
     };
 
     // Find and update the most recent document (you should modify this query as needed)
-    const result = await CombinedRequirement.findOneAndUpdate(
+    const result = await CustomerRequirementInput.findOneAndUpdate(
       {}, // Adjust this filter based on your user/session handling (e.g., by user ID)
       updateData,
       { sort: { createdAt: -1 }, new: true }

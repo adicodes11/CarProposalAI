@@ -21,6 +21,9 @@ import icon_financing_options from './icon_financing_options.png'
 import icon_expert_guidance from './icon_expert_guidance.png'
 import icon_customization from './icon_customization.png'
 // import welcomepage_video from './welcomepage_video.mp4'
+import ground_clearance from './ground_clearance.png'
+import info_icon from './info_icon.png'
+import boot_space from './boot_space.png'
 
 export const assets = {
     facebook_icon,  
@@ -45,5 +48,8 @@ export const assets = {
     icon_financing_options,
     icon_expert_guidance,
     icon_customization,
-    // welcomepage_video
+    // welcomepage_video,
+    ground_clearance,
+    info_icon,
+    boot_space,
 }

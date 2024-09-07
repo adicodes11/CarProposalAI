@@ -32,26 +32,29 @@ export default function SignIn() {
       const data = await res.json();
       if (res.ok) {
         setMessage('User signed in successfully!');
-        
-        // Save the user's first name to session storage
-        sessionStorage.setItem('firstName', data.firstName);
 
+        // Save the user's first name and userId to session storage
+        sessionStorage.setItem('firstName', data.firstName);
+        sessionStorage.setItem('userId', data.userId); // Save userId to sessionStorage
+
+        // Redirect to the welcome page
         setTimeout(() => {
-          router.push('/welcome'); // Redirect to the welcome page
+          router.push('/welcome'); // Adjust this path as needed
         }, 1500);
       } else {
-        setMessage(data.error);
+        // Set error message from response
+        setMessage(data.error || 'An error occurred. Please try again.');
       }
     } catch (error) {
       console.error('Error signing in user:', error);
-      setMessage('An error occurred. Please try again.');
+      setMessage('An unexpected error occurred. Please try again later.');
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <div className="flex flex-grow flex-col justify-center items-center bg-white pt-16">
+      <div className="flex flex-grow flex-col justify-center items-center bg-white pt-16 pb-64"> {/* Increase padding-bottom to push the footer further down */}
         <h1 className="text-3xl font-bold mb-6">Welcome back! Please sign in.</h1>
         <form onSubmit={handleSubmit} className="w-full max-w-md bg-white p-8 rounded shadow-lg">
           <div className="mb-4">
@@ -97,9 +100,7 @@ export default function SignIn() {
           </a>
         </p>
       </div>
-      <div style={{ paddingTop: '20rem' }}>
-        <Footer />
-      </div>
+      <Footer /> {/* Footer will be pushed further down initially */}
     </div>
   );
 }
